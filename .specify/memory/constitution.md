@@ -1,50 +1,174 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: 1.1.0 → 1.2.0
+- Modified principles:
+  - III. 同一契约，进入执行层前双重校验：补入服务端持有指令与 Schema、禁止补齐重试、time 单位
+  - IV. 密钥与帧数据只活在单次请求内：补入访问日志、临时文件、崩溃转储、密钥轮换与演示关闭
+  - V. 超时后的服务端结果作废：补入上游中止、P0/P1 截止时间分离、单进程去重
+- Added sections: 无新章节；后端约束扩大
+- Removed sections: 无
+- Templates status: 依赖模板在运行时读取本文件，本次未改模板
+- Deferred TODOs:
+  - TODO(FRAME_UPLOAD): 单帧是否允许离开浏览器仍待团队书面确认
+  - TODO(PROXY_RUNTIME): 感知代理的语言、框架和部署形态未冻结
+  - TODO(DOC_SYNC): docs/BreakGlass-constitution.md 1.1.0 尚未同步感知代理窄例外
+  - TODO(REPO_BOUNDARY): AGENTS.md 仍规定本仓库只负责前端
+  - TODO(RESET_EXIT): 重置是否保留交互层、退出后是否保持暂停，执行计划仍标为未确认
+  - TODO(CURVE_FORM): 抛物线参数形式、初值、范围和步长必须来自最终演示素材，本文件不预设公式
+-->
+
+# BreakGlass Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. P0 由前端闭环交付
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+P0 的唯一交付门槛是一个可重复演示的数学抛物线场景：使用团队提供的录屏或固定机位视频，完成播放、暂停、目标帧定位、破壁入口、与视频内容对齐的 SVG 抛物线、参数调整、重置、退出，以及加载、错误、取消、超时和本地预制保底。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+P0 不承诺任意视频、通用视觉识别、完整代码沙盒或纯本地识别。预制结果可以支撑演示，但必须标明数据来源。预制路径使用的 `enableLocalMock` 与 `fallbackAfterMs: 1500` 不得依赖服务端存活。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Python/Pyodide、本地 Web Worker 和真实视觉识别各自是独立 P1。每项都要有自己的开关、契约、安全预算和验收记录，不得阻塞或稀释 P0，也不得因本文件自动扩展成完整代码沙盒。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+以下内容不属于当前交付范围：用户注册或登录、云端同步、历史记录数据库、点赞分享、多语言、多对象识别、C++/Java/Go 等语言支持，以及其他不直接服务核心演示的 SaaS 功能。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### II. 服务端只允许无状态感知代理
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+浏览器包内不得放置视觉服务密钥或代理访问密钥。因此，真实识别若需要托管密钥，唯一允许的服务端角色是无状态感知代理：接收一次识别请求，用服务端凭证调用外部视觉服务，校验候选结果，再返回结构化响应或类型化错误。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+该代理不得成长为产品中枢。账号、登录、权限系统、数据库、历史记录、分享、代码执行容器，以及与核心演示无关的 SaaS 能力，仍然禁止。P1 的 Python 执行留在扩展内的 Web Worker，不迁到服务端。
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+单帧是否允许离开浏览器尚未确认。团队用书面决定记录允许上传之前，计划与实现必须保持预制或本地路径，不得先做上传接口。
+
+### III. 同一契约，进入执行层前双重校验
+
+“Zero LLM hallucinations”不是可执行机制。视觉模型只产生候选结构，不产生可直接绘制或执行的事实。代理与扩展必须消费同一份已版本化的 JSON Schema，并经过同一个 `CurveResult` 适配器。代理必须先拒绝不合法的上游输出；扩展在绘图或执行前必须再次校验。任一侧失败，都要显示可恢复状态，结果不得进入交互层。
+
+发给视觉供应商的结构化指令和 JSON Schema 必须放在服务端。客户端只提交当前帧和对齐所需元数据。代理必须拒绝客户端传入的 prompt、模型名和 schema。图像中的文字不得改变这些指令。校验失败返回 `schema_rejected`，不得再次调用模型补齐字段。
+
+进入交互层前必须通过：固定 JSON Schema、白名单曲线或 AST 节点、语法限制、有限值、尺寸和参数范围，以及 `requestId`、`videoId`、时间和可选置信度。Schema 必须写明 `time` 的单位。字段缺失、解析失败、数值非有限、帧不匹配或低于约定置信度时，必须拒绝。
+
+`source` 只允许 `vision` 或 `preset`。代理只能标记 `vision`，不得把模型输出标成预制成功。界面必须持续展示来源和回退原因。置信度缺失时不得编造准确率。
+
+严禁把识别出或修改后的代码交给大模型，让它预测输出或模拟逻辑。代码结果只能来自确定性本地执行器、断言和可记录的运行状态。
+
+### IV. 密钥与帧数据只活在单次请求内
+
+视觉服务密钥只存在于服务端环境，不得进入扩展包、仓库、日志或响应体。代理不得把帧图像、原视频、识别出的代码或上游原文写入数据库、对象存储、可回放日志、反向代理访问日志、临时文件或崩溃转储。错误响应只返回稳定错误码，不得回传上游原文。
+
+日志可以保留 `requestId`、耗时、结果码和载荷大小。日志不得保留图像字节、密钥或完整源代码。上游供应商是否保留帧，必须在启用真实识别前写成外部依赖；未知保留政策时，不得宣称数据没有离开本机。
+
+供应商密钥必须能在不发布新扩展的情况下轮换。演示结束后必须能关闭代理进程并作废该密钥。
+
+### V. 超时后的服务端结果作废
+
+扩展在 1500ms 后接管匹配当前帧的预制结果，并持续显示“本地预制/超时回退”及原因。这个接管不要求用户再次点击。超过该预算才返回的代理响应必须被丢弃，包括稍后成功的视觉结果。
+
+P0 的上游截止时间是 1500ms。客户端断开或到达该截止时间时，正在进行的上游调用必须中止。P1 若需要更长的真实识别等待，必须另行写明截止时间，不得悄悄加长 P0 的 1500ms。
+
+演示部署必须是单进程。进程内存可以短时保留进行中的 `requestId` 和已校验的结构化结果，以便去重；不得保留图像，不得写入磁盘，进程退出后即消失。同一 `requestId` 处理期间不得再次调用上游视觉服务。
+
+回退前必须先校验当前 `requestId`、视频和帧位置。真实业务失败、校验失败和无缓存不得被改写成识别成功；无可用缓存时保留错误、重试和退出入口。
+
+## 后端约束
+
+以下规则仅在原则 II 的上传决定已经记录、并且真实识别被单独立项后适用。
+
+- 代理是独立的无状态进程，演示部署必须是单进程。它不拥有用户、会话、迁移或后台队列。进程内存只短时保留进行中的 `requestId` 和已校验结构化结果。本仓库在 `AGENTS.md` 仍限定前端职责时，不得把该进程的实现放进本仓库。
+- 客户端只提交当前帧和对齐所需元数据。请求体上限为 4MiB；超出必须返回 `invalid_input`，不得截断后继续调用上游。结构化指令和 Schema 只存在于服务端。
+- 响应必须是约定的 JSON，而不是 HTML 或未文档化的文本。失败使用稳定错误码：`invalid_input`、`unsupported_scene`、`schema_rejected`、`provider_error`、`timeout`、`budget_exhausted`。
+- 在 P0 范围内，代理只接受数学曲线场景。代码场景必须先有独立的 P1 开关和契约；即使返回代码候选，也不得在服务端执行。未列入白名单的曲线和其他对象返回 `unsupported_scene`。
+- 健康检查不得调用视觉供应商，也不得接受帧数据。
+- 非本地环境必须使用明确的来源允许列表。该列表不是身份认证，不得对任意来源开放帧上传。扩展包内不得放置代理访问密钥。
+- 并发、频率和上游调用预算必须写在运行配置中。预算用尽时返回 `budget_exhausted`，不得继续调用上游，也不得在超时后自动重试。
+- P0 上游调用必须在 1500ms 或客户端断开时中止。P1 的更长截止时间必须单独记录。
+- 代理必须用固定夹具证明非法输出会被拒绝、合法抛物线候选会被放行。夹具不得包含真实密钥。
+- 代理的语言和框架不是本文件的不变量。选定后必须锁定版本、密钥来源和本地运行方式，并保持可被另一实现替换，只要 Schema 与错误码不变。
+
+## 前端基线与质量门禁
+
+本节收录已批准的扩展与前端规则。本文件不表示这些能力已经实现。
+
+### 技术路线
+
+- 交付形态是 Chrome MV3 扩展加浏览器前端。P1 可以使用本地 WASM。扩展侧不得新增代码执行容器、数据库或服务端鉴权；服务端角色只受原则 II 约束。
+- 技术路线只能选一条并写入执行计划：Vanilla JS + 原生 CSS/SVG，或 Preact + 固定构建工具（可含 Tailwind）。不得把 Vanilla JS、Preact 和 Tailwind 同时写成无条件技术不变量。没有既有工程约束时，P0 默认采用 Vanilla JS + 原生 CSS/SVG。
+- P0 优先使用原生 SVG 绘制。P1 如引入 Pyodide 或绘图库，必须锁定精确版本、资源来源、完整性校验和离线资源策略。`Pyodide v0.25+` 或未锁定版本的 Function-Plot 不能作为可复现依赖声明。
+- MV3 manifest 权限、content script、service worker、Worker/WASM 路径和 CSP 约束必须记录在执行计划中。扩展不得加载远程可执行代码。
+
+### 零侵入与支持边界
+
+- 视频控制、当前时间和源尺寸读取只能使用标准 HTML5 Video API，包括 `currentTime`、`videoWidth`、`videoHeight`、播放/暂停事件和元素实际显示矩形。扩展注入、生命周期和消息通信可以使用 MV3 content script、service worker 和标准消息 API。
+- 首版只承诺已验证的域名和页面结构：页面中存在可访问的目标 `<video>`，扩展可以在其上方挂载独立透明 overlay。跨域 iframe、权限不足的 iframe、Shadow DOM、DRM、无法访问的媒体和未验证播放器不纳入验收。标准 DOM 不能绕过同源限制。
+- 只在 `<video>` 上方挂载独立 SVG/overlay。不得改写播放器控制条、拦截广告或 DRM、替换媒体源，或进行会破坏原网页的 DOM 变更。按下 ESC 或退出后，必须移除 overlay、监听器和消息通道，播放器立即回到原网页状态。
+
+### P1 Pyodide 与 Worker 安全
+
+本节仅在 P1 开关启用时适用：
+
+- 每次执行使用可重建的 Web Worker。超时、取消、异常或页面卸载时强制 `terminate`，并显示对应状态。不得让旧 Worker 继续占用页面。
+- 默认安全预算为：单次执行 watchdog 2s、输入 ≤ 256KiB、输出 ≤ 64KiB、内存目标 ≤ 128MiB。浏览器不能保证跨平台的硬内存隔离。若运行时无法测量内存，必须记录该限制，并在超时、OOM 或异常时 terminate。未冻结或未验证这些预算前，P1 不得宣称可执行任意 Python。
+- 禁止网络访问、动态安装包和未列入白名单的包或模块。只加载随扩展打包或经过完整性校验的固定资源。
+- Pyodide、WASM、Python 包和绘图库的首次加载、Worker 初始化和缓存命中分别计时，不得混入 P0 预制交互指标。
+
+### 本地预制
+
+每一个交互节点都必须读取静态 JSON 配置中的 `enableLocalMock`。配置至少包含 `enableLocalMock`、`fallbackAfterMs: 1500`、预制结果键和是否已预热的标记。预制 JSON 必须符合统一 `CurveResult` 契约，并与视频标识、目标时间、帧尺寸、图形区域和参数范围匹配。
+
+`enableLocalMock` 是明确的构建或运行配置，不得在生产构建中意外开启。P0 的时间目标是：在冻结设备和热缓存条件下，超时事件到首个可见 SVG 帧的 P95 ≤ 100ms。该指标不含网络、扩展注入、视频首帧解码或 Pyodide 初始化。
+
+### 几何映射
+
+坐标实现必须区分原始帧像素、数学坐标和页面显示坐标：
+
+1. 使用 `video.videoWidth` 和 `video.videoHeight` 作为源尺寸。
+2. 使用视频元素实际显示矩形，结合 `object-fit`、`object-position` 和视频内容区域计算 letterbox/pillarbox 后的映射。
+3. 固定 SVG `viewBox` 原点、缩放比例和坐标方向，并在窗口变化、全屏、页面缩放和设备像素比变化后重新计算。
+
+验收至少覆盖 16:9、4:3、竖屏和带黑边样例，并按冻结的像素误差阈值检查叠加位置。首版支持范围锁定为录屏或固定机位课件。不支持手持晃动、强透视或动态实拍，也不要求前端自动判断视频是否符合该范围。抛物线的具体公式、初值、范围和步长以最终演示素材为准，未确认前不得写成已冻结数学定义。
+
+### 性能口径
+
+所有性能数据必须记录事件起点、终点、缓存状态、浏览器和测试机器，并报告 P50/P95。至少分别记录：
+
+- 预制交互首次可见：用户触发预制路径到首个 SVG 帧绘制。
+- 感知等待：请求发出到真实结果、错误或超时。
+- 回退显现：超时事件到缓存 SVG 首帧。
+- Pyodide 首次初始化和缓存初始化。
+
+“200ms 冷启动”不得作为未定义的总指标。若保留该目标，必须明确只适用于热缓存预制路径，并在执行计划中写出设备、浏览器、网络和统计口径。
+
+### P0 验收证据
+
+- 目标视频可重复播放、暂停和定位。破壁入口只在合理状态可用。
+- 预制曲线、参数、拖动、重置和退出可重复执行，来源始终可见。
+- SVG 在四类宽高比和窗口变化后保持与视频内容区域对齐。键盘焦点和 ESC 路径可用。
+- 加载、资源失败、识别失败、超时、取消和无缓存都有可操作反馈。旧请求不能覆盖新帧。
+- 超时回退使用匹配的本地 JSON，且不冒充真实识别。结果按本节性能口径记录。
+
+P1 只有在开关、契约、安全预算、精确依赖版本和测试证据齐备后才可标记完成。其余内容写为实验或外部依赖，不得声称已实现。
+
+Spec、Plan、Tasks 和代码审查必须能指出：当前能力属于 P0 预制、P1 真实识别，还是尚未批准的上传。未确认的字段必须标为建议，不得写成已有接口。
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+本文件是 BreakGlass 已定产品约束的单一治理源，也是 Spec Kit 的治理源。优先级为：本文件 > 已确认的需求和接口契约 > Plan 与 Tasks > 实现偏好。根目录 `AGENTS.md` 继续规定本仓库的前端工程做法；产品范围与本文件冲突时，以本文件为准。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+`docs/BreakGlass-constitution.md` 1.1.0 的前端规则已写入本文件。该文档在同步前仍可能保留“禁止一切业务后端”的旧表述。服务端角色以原则 II 为准。上传决定、该文档同步和 `AGENTS.md` 仓库边界修订完成前，不得开始实现感知代理。
+
+用户的最新明确决定可以启动修订，但不能形成未写入本文件的例外。发现任务、需求、计划或代码违反本文件时，必须在进入实现或合并前标记，并说明影响。需求与本文件冲突时，先修订并递增版本号，再回写 Plan 与 Tasks。低层文档不得静默覆盖本文件。
+
+修订本文件必须更新版本、日期和变更记录，并同步受影响的需求分析与执行计划。MAJOR 用于删除或重定义不可协商的原则。MINOR 用于新增原则或实质扩大约束。PATCH 用于澄清和不改变含义的文字修正。
+
+每次 Spec、Plan、Tasks 和代码审查都要检查：P0 能否离线演示、技术路线是否只选一条、MV3 权限与 CSP 是否写入计划、服务端任务是否越出感知代理、密钥是否可能进入浏览器、Schema 与结构化指令是否在服务端、`time` 单位是否写明、上游调用是否在截止时间中止、调用预算用尽后是否停止、固定夹具是否覆盖拒绝与放行、超时结果是否会被当成成功、P1 是否单独开关。例外必须记录原因、影响、责任人、有效期限、恢复条件，以及是否阻塞 P0。没有记录的例外不算批准。
+
+本文件不授权在 `AGENTS.md` 修订前于本仓库新建后端，也不把未实现的 P1 视为已经完成。
+
+**Version**: 1.2.0 | **Ratified**: 2026-10-02 | **Last Amended**: 2026-10-02
+
+## 变更记录
+
+| 版本 | 日期 | 变更 |
+| --- | --- | --- |
+| 1.0.0 | 2026-10-02 | 首次批准。确立 P0 前端闭环，并把服务端限制为尚未获准开工的无状态感知代理。 |
+| 1.1.0 | 2026-10-02 | 写入原先只在前端基线中批准的技术路线、零侵入、Pyodide 预算、预制配置、几何映射、性能口径和 P0 验收证据。 |
+| 1.2.0 | 2026-10-02 | 补齐感知代理的可执行约束：服务端持有指令与 Schema、单进程去重、上游中止、调用预算、密钥轮换，以及拒绝/放行夹具。 |
