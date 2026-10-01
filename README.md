@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 BreakGlass（破壁）产品需求文档（PRD）
 
 一、文档概述
@@ -214,4 +215,5 @@ video.pause() → Canvas 抓帧 → 屏幕边缘闪烁扫描光效
 
 BreakGlass（破壁） · v0.1.0-alpha · Hackathon 48h MVP
 砸碎视频的只读玻璃，让屏幕里的死像素变成可触碰的活程序
+
 
