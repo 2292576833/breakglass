@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "BreakGlass（破壁）",
+  "version": "0.1.0",
+  "description": "在扩展内演示页中把预先准备的数学抛物线变成可调节的 SVG 图层。",
+  "action": {
+    "default_title": "打开 BreakGlass 演示"
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "permissions": [],
+  "host_permissions": [],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

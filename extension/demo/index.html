@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BreakGlass · 原位抛物线演示</title>
+    <link rel="stylesheet" href="./demo.css">
+    <script defer src="../src/curve/validate.js"></script>
+    <script defer src="../src/curve/evaluate.js"></script>
+    <script defer src="../src/geometry/content-rect.js"></script>
+    <script defer src="../src/session/session.js"></script>
+    <script defer src="../src/preset/load.js"></script>
+    <script defer src="../src/page/main.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">BREAKGLASS · P0 DEMO</p>
+          <h1>让视频里的抛物线可以被调节</h1>
+          <p class="lede">当前页面只使用扩展包内的预先准备结果，来源会持续显示。</p>
+        </div>
+        <span class="status-chip" id="source-label">等待素材</span>
+      </header>
+
+      <section class="workspace" aria-label="抛物线演示工作台">
+        <div class="video-column">
+          <div class="video-stage" id="video-stage">
+            <video id="demo-video" data-video-id="fixture-parabola" preload="metadata" controls playsinline></video>
+            <div class="asset-empty" id="asset-empty">正式视频素材尚未提供。当前只能验证扩展骨架与夹具逻辑。</div>
+          </div>
+          <div class="transport" aria-label="视频控制">
+            <button type="button" id="play-toggle">播放</button>
+            <button type="button" id="jump-target">定位目标时间</button>
+            <label>目标时间（秒） <input id="target-time" type="number" min="0" step="0.1" value="12.5"></label>
+            <span id="time-label">当前时间：—</span>
+          </div>
+        </div>
+
+        <aside class="control-panel" aria-label="交互控制">
+          <p class="panel-kicker">INTERACTION</p>
+          <h2>抛物线参数</h2>
+          <p id="state-label" role="status">请加载演示视频并暂停在目标时间。</p>
+          <button class="primary" type="button" id="wake-button" disabled>破壁 <span>Alt+B</span></button>
+          <div class="parameter-row">
+            <label for="parameter-h">水平位置 h</label>
+            <output id="parameter-h-value">—</output>
+            <input id="parameter-h" type="range" min="-2" max="2" step="0.1" value="0" disabled>
+          </div>
+          <div class="panel-actions">
+            <button type="button" id="reset-button" disabled>重置</button>
+            <button type="button" id="exit-button" disabled>退出</button>
+          </div>
+          <p class="source-note" id="source-note">数据来源将在交互出现后显示。</p>
+        </aside>
+      </section>
+
+      <footer class="app-footer">
+        <span>Esc 退出 · 空格保留给播放器</span>
+        <span id="runtime-note">本地配置加载中…</span>
+      </footer>
+    </main>
+  </body>
+</html>
