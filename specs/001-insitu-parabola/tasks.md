@@ -4,6 +4,8 @@
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/, quickstart.md
 
+**进度（2026-10-02）**: 对照当前扩展实现更新。T001–T016、T018 已完成；`node --test` 14 项通过。T017 尚未做浏览器手工记录，正式视频和原位验收素材也仍未提供。这些证据齐备前不要开始故事 2。
+
 **Tests**: 包含宪法要求的纯函数夹具。只覆盖 MVP 主路径，不写超时和四画幅测试。
 
 **Organization**: 本次只拆用户故事 1。故事 2、故事 3 和真实识别只登记范围，不生成任务。
@@ -24,9 +26,9 @@
 
 **Purpose**: 建立 MV3 扩展骨架，不引入打包器、Preact、Tailwind 或 FastAPI
 
-- [ ] T001 按 plan.md 创建目录 `extension/demo/`、`extension/src/background/`、`extension/src/page/`、`extension/src/session/`、`extension/src/geometry/`、`extension/src/curve/`、`extension/src/preset/`、`extension/assets/presets/`、`extension/assets/video/`、`tests/`
-- [ ] T002 [P] 编写 `extension/manifest.json`：`manifest_version` 为 3；`permissions` 与 `host_permissions` 为空；不声明 `content_scripts`；`content_security_policy.extension_pages` 为 `script-src 'self'; object-src 'self'`；不加入 `wasm-unsafe-eval`；action 打开扩展内演示页；background 为 module service worker
-- [ ] T003 [P] 编写 `extension/src/background/service-worker.js`：不发起网络请求，不读写密钥、帧或曲线结果
+- [x] T001 按 plan.md 创建目录 `extension/demo/`、`extension/src/background/`、`extension/src/page/`、`extension/src/session/`、`extension/src/geometry/`、`extension/src/curve/`、`extension/src/preset/`、`extension/assets/presets/`、`extension/assets/video/`、`tests/`
+- [x] T002 [P] 编写 `extension/manifest.json`：`manifest_version` 为 3；`permissions` 与 `host_permissions` 为空；不声明 `content_scripts`；`content_security_policy.extension_pages` 为 `script-src 'self'; object-src 'self'`；不加入 `wasm-unsafe-eval`；action 打开扩展内演示页；background 为 module service worker
+- [x] T003 [P] 编写 `extension/src/background/service-worker.js`：不发起网络请求，不读写密钥、帧或曲线结果
 
 ---
 
@@ -36,15 +38,15 @@
 
 **⚠️ CRITICAL**: 用户故事 1 必须等本阶段完成
 
-- [ ] T004 [P] 先写会失败的夹具 `tests/validate.test.js`：合法 `source: "preset"` 通过；缺字段、非有限数值、region 越出 frameSize、未知 `equationId`、`videoId` 不匹配均拒绝；`source: "vision"` 拒绝；夹具不含密钥
-- [ ] T005 [P] 先写会失败的夹具 `tests/content-rect.test.js`：源尺寸只用 `videoWidth` 与 `videoHeight`；`object-fit: contain` 且 `object-position: 50% 50%` 时，容器更宽产生左右黑边，容器更高产生上下黑边；内容矩形不包含黑边
-- [ ] T006 实现 `extension/src/curve/validate.js`，使 T004 通过。`time` 单位为秒，默认容差 ±0.2 秒。参数满足 min ≤ initial ≤ max 且 step > 0。domain 与 range 满足 min < max。`dragParameter` 必须是 parameters 的键。region 宽高为正且完全落在 frameSize 内
-- [ ] T007 实现 `extension/src/geometry/content-rect.js`，使 T005 通过。输出元素边框、去掉黑边后的内容矩形，以及源像素到 CSS 像素的比例
-- [ ] T008 [P] 实现 `extension/src/curve/evaluate.js`：按 `equationId` 查找求值器；未知 id 失败；只注册标明为夹具的 `fixture.parabola`，不把某一条代数式写成正式公式
-- [ ] T009 [P] 编写 `extension/assets/config.json`：`enableLocalMock` 为 true，`fallbackAfterMs` 为 1500，`presetKey` 指向夹具，`prewarmed` 为 true，`externalAttempt` 为 `off`。文件中不得出现密钥或上传地址
-- [ ] T010 实现 `extension/src/preset/load.js`：读取 `extension/assets/config.json` 与 `presetKey` 对应的 JSON，并调用 `extension/src/curve/validate.js`。校验失败时返回可展示的失败，不返回可绘制结果
+- [x] T004 [P] 先写会失败的夹具 `tests/validate.test.js`：合法 `source: "preset"` 通过；缺字段、非有限数值、region 越出 frameSize、未知 `equationId`、`videoId` 不匹配均拒绝；`source: "vision"` 拒绝；夹具不含密钥
+- [x] T005 [P] 先写会失败的夹具 `tests/content-rect.test.js`：源尺寸只用 `videoWidth` 与 `videoHeight`；`object-fit: contain` 且 `object-position: 50% 50%` 时，容器更宽产生左右黑边，容器更高产生上下黑边；内容矩形不包含黑边
+- [x] T006 实现 `extension/src/curve/validate.js`，使 T004 通过。`time` 单位为秒，默认容差 ±0.2 秒。参数满足 min ≤ initial ≤ max 且 step > 0。domain 与 range 满足 min < max。`dragParameter` 必须是 parameters 的键。region 宽高为正且完全落在 frameSize 内
+- [x] T007 实现 `extension/src/geometry/content-rect.js`，使 T005 通过。输出元素边框、去掉黑边后的内容矩形，以及源像素到 CSS 像素的比例
+- [x] T008 [P] 实现 `extension/src/curve/evaluate.js`：按 `equationId` 查找求值器；未知 id 失败；只注册标明为夹具的 `fixture.parabola`，不把某一条代数式写成正式公式
+- [x] T009 [P] 编写 `extension/assets/config.json`：`enableLocalMock` 为 true，`fallbackAfterMs` 为 1500，`presetKey` 指向夹具，`prewarmed` 为 true，`externalAttempt` 为 `off`。文件中不得出现密钥或上传地址
+- [x] T010 实现 `extension/src/preset/load.js`：读取 `extension/assets/config.json` 与 `presetKey` 对应的 JSON，并调用 `extension/src/curve/validate.js`。校验失败时返回可展示的失败，不返回可绘制结果
 
-**Checkpoint**: 校验与黑边计算可由 `node --test` 覆盖。此时还没有可见的抛物线交互
+**Checkpoint**: 校验与黑边计算可由 `node --test` 覆盖。这个检查点只表示本阶段当时还没有可见交互；演示页交互从 Phase 3 开始，现已有夹具页面。
 
 ---
 
@@ -56,17 +58,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] 先写会失败的 `tests/session.test.js`：时间落在目标 ±0.2 秒才可唤醒；`externalAttempt: off` 且结果匹配时进入交互；拖动只改变 `dragParameter` 并钳制在 min 与 max 内；重置恢复 initial 且会话仍在；退出后会话消失且状态为暂停；同一时刻只有一个会话；旧 `requestId` 不能写入当前会话
+- [x] T011 [P] [US1] 补齐 `tests/session.test.js`：时间落在目标 ±0.2 秒才可唤醒；拖动钳制；重置后仍在交互；退出后会话消失；旧 `requestId` 不能写入；`externalAttempt` 不是 `off` 时不得进入交互；同一时刻只有一个会话；播放或离开目标时间时结束会话。共 14 项纯函数测试通过
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] 实现 `extension/src/session/session.js`，使 T011 通过。只实现 `externalAttempt: off`。其他取值不得画出曲线，也不得标成识别成功。播放或离开目标时间时结束会话
-- [ ] T013 [P] [US1] 编写 `extension/assets/presets/` 中的夹具 JSON：`source` 为 `preset`，`fallback` 为 null，`time` 为秒，`videoId` 含 `fixture`。参数满足 min ≤ initial ≤ max 且 step > 0，region 落在 frameSize 内。文案标明这不是正式网课素材
-- [ ] T014 [P] [US1] 编写 `extension/demo/index.html` 与 `extension/demo/demo.css`：一个 `object-fit: contain`、`object-position: 50% 50%` 的 video；播放、暂停、定位、破壁、重置、退出和来源区域。不把空格设为破壁键
-- [ ] T015 [US1] 实现 `extension/src/page/main.js`：Alt+B 与可见按钮在暂停且时间匹配时唤醒；用 SVG 按求值器绘制；拖动、数字和曲线同步；重置保留覆盖层；Esc、退出按钮和点击覆盖层外部都会移除覆盖层与监听，视频保持暂停；来源从出现到退出都是“预先准备的示例”；窗口变化时重算当前这一帧的内容矩形
-- [ ] T016 [US1] 在 `extension/assets/video/README.md` 写明正式视频文件尚未提供。`extension/src/page/main.js` 在视频缺失或打不开时只显示说明，不挂覆盖层，不用夹具曲线冒充已经对齐的真实画面
+- [x] T012 [US1] 收紧 `extension/src/session/session.js`，使 T011 通过。`off` 主路径进入交互；其他 `externalAttempt` 明确拒绝；同一时刻只有一个会话；播放、离开目标时间或时间无效时会话结束并使旧请求失效
+- [x] T013 [P] [US1] 编写 `extension/assets/presets/` 中的夹具 JSON：`source` 为 `preset`，`fallback` 为 null，`time` 为秒，`videoId` 含 `fixture`。参数满足 min ≤ initial ≤ max 且 step > 0，region 落在 frameSize 内。文案标明这不是正式网课素材
+- [x] T014 [P] [US1] 编写 `extension/demo/index.html` 与 `extension/demo/demo.css`：一个 `object-fit: contain`、`object-position: 50% 50%` 的 video；播放、暂停、定位、破壁、重置、退出和来源区域。不把空格设为破壁键
+- [x] T015 [US1] 收紧 `extension/src/page/main.js`：暂停且时间匹配时按钮和 Alt+B 能唤醒；已有覆盖层时不重复挂层；来源持续显示「预先准备的示例」；点击舞台中覆盖层外部退出并保持暂停；SVG 绘制和拖动使用当前视频的 `videoWidth` 与 `videoHeight`；窗口变化时重算内容矩形
+- [x] T016 [US1] 在 `extension/assets/video/README.md` 写明正式视频文件尚未提供。`extension/src/page/main.js` 在视频缺失或打不开时只显示说明，不挂覆盖层，不用夹具曲线冒充已经对齐的真实画面
 
-**Checkpoint**: 故事 1 可以离线演示。停在这里验收 MVP，不要继续实现故事 2
+**Checkpoint**: 夹具主路径已经能离线跑通。T011、T012、T015 已收口；正式视频、原位素材和 T017 浏览器手工记录完成前，故事 1 仍不算最终验收通过。不要继续实现故事 2
 
 ---
 
@@ -74,8 +76,8 @@
 
 **Purpose**: 只验收已拆分的 MVP
 
-- [ ] T017 按 `specs/001-insitu-parabola/quickstart.md` 第 1 节加载未打包扩展并记录结果。不执行该文件第 2 节和第 3 节
-- [ ] T018 [P] 对照 `specs/001-insitu-parabola/contracts/extension-surface.md` 检查 `extension/manifest.json`，确认没有主机权限、内容脚本和远程脚本
+- [ ] T017 按 `specs/001-insitu-parabola/quickstart.md` 第 1 节加载未打包扩展并记录结果。不执行该文件第 2 节和第 3 节。自动化夹具已通过，这一步的手工点击还没有记录
+- [x] T018 [P] 对照 `specs/001-insitu-parabola/contracts/extension-surface.md` 检查 `extension/manifest.json`，确认没有主机权限、内容脚本和远程脚本。2026-10-02 核对通过：权限与主机权限为空，未声明 `content_scripts`，扩展页 CSP 为 `script-src 'self'; object-src 'self'`
 
 ---
 
@@ -126,6 +128,9 @@
 - T006、T007、T009 完成后再做 T010
 - T012、T013、T014 完成后再做 T015
 - T016 与 T015 同一文件的收尾放在 T015 之后
+- T011 的缺项先补测试，再收紧 T012
+- T015 的缺项放在 T012 之后
+- T017 放在 T015 之后
 
 ### Parallel Opportunities
 
@@ -155,11 +160,10 @@
 
 ### MVP First (User Story 1 Only)
 
-1. 完成 Phase 1
-2. 完成 Phase 2
-3. 完成 Phase 3
-4. **停下来验收** quickstart.md 第 1 节
-5. 故事 2、故事 3 等下一轮再拆任务
+1. Phase 1 与 Phase 2 已完成
+2. 保持 T011、T012、T015 的实现与契约一致
+3. **停下来验收** quickstart.md 第 1 节（T017）
+4. 故事 2、故事 3 等下一轮再拆任务
 
 ### Incremental Delivery
 
@@ -171,6 +175,7 @@
 
 ## Notes
 
+- 前后端分工见 [ownership.md](./ownership.md)。编号任务前端 10 项、后端 8 项
 - `[P]` 表示不同文件且不依赖未完成任务
 - 故事 2 和故事 3 故意没有任务编号
 - 夹具视频和 `fixture.parabola` 只用于工程验证
