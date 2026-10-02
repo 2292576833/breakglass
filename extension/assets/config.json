@@ -1,0 +1,7 @@
+{
+  "enableLocalMock": true,
+  "fallbackAfterMs": 1500,
+  "presetKey": "demo-parabola",
+  "prewarmed": true,
+  "externalAttempt": "off"
+}

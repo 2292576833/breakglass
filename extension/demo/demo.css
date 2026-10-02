@@ -1,0 +1,47 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #08111f;
+  color: #eef5ff;
+  --panel: rgba(14, 29, 49, 0.92);
+  --line: rgba(157, 190, 226, 0.22);
+  --muted: #9fb4cc;
+  --accent: #71ddff;
+  --accent-strong: #1bb6e8;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 960px; min-height: 100vh; background: radial-gradient(circle at 10% 0%, #17314d, #08111f 45%); }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:disabled, input:disabled { cursor: not-allowed; opacity: 0.45; }
+.app-shell { width: min(1320px, calc(100% - 64px)); margin: 0 auto; padding: 42px 0 28px; }
+.app-header, .app-footer, .transport, .panel-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.eyebrow, .panel-kicker { margin: 0 0 10px; color: var(--accent); font-size: 11px; letter-spacing: 0.18em; font-weight: 700; }
+h1, h2, p { margin-top: 0; }
+h1 { max-width: 660px; margin-bottom: 10px; font-size: clamp(32px, 4vw, 58px); line-height: 1.04; letter-spacing: -0.04em; }
+h2 { margin-bottom: 8px; font-size: 24px; }
+.lede, #state-label, .source-note, .app-footer { color: var(--muted); }
+.lede { max-width: 640px; margin-bottom: 0; }
+.status-chip { border: 1px solid rgba(113, 221, 255, 0.35); border-radius: 999px; padding: 8px 13px; color: var(--accent); font-size: 12px; white-space: nowrap; }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 20px; margin-top: 36px; }
+.video-column, .control-panel { border: 1px solid var(--line); border-radius: 20px; background: var(--panel); box-shadow: 0 20px 70px rgba(0, 0, 0, 0.25); }
+.video-column { padding: 14px; }
+.video-stage { position: relative; display: grid; place-items: center; min-height: 540px; overflow: hidden; border-radius: 13px; background: #02070e; }
+video { display: block; width: 100%; height: 100%; min-height: 540px; object-fit: contain; object-position: 50% 50%; background: #02070e; }
+.asset-empty { position: absolute; inset: auto 20px 18px; padding: 10px 12px; border: 1px solid rgba(255, 193, 102, 0.3); border-radius: 10px; background: rgba(38, 24, 8, 0.9); color: #ffd08a; font-size: 12px; pointer-events: none; }
+.transport { flex-wrap: wrap; padding: 14px 2px 0; color: var(--muted); font-size: 13px; }
+button { border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; background: rgba(121, 157, 196, 0.08); color: #eef5ff; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+.control-panel { padding: 24px; }
+.control-panel #state-label { min-height: 48px; font-size: 13px; line-height: 1.5; }
+.primary { width: 100%; margin: 8px 0 30px; border-color: transparent; background: linear-gradient(135deg, var(--accent-strong), #2879ff); font-weight: 700; }
+.primary span { margin-left: 8px; color: rgba(255, 255, 255, 0.7); font-size: 11px; font-weight: 500; }
+.parameter-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 28px; }
+.parameter-row label { font-size: 13px; }
+.parameter-row output { color: var(--accent); font-variant-numeric: tabular-nums; }
+.parameter-row input { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); }
+.panel-actions { justify-content: flex-start; }
+.source-note { min-height: 40px; margin: 24px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.5; }
+.app-footer { margin-top: 18px; font-size: 12px; }
+@media (max-width: 1050px) { body { min-width: 0; } .app-shell { width: min(720px, calc(100% - 32px)); } .workspace { grid-template-columns: 1fr; } .video-stage, video { min-height: 420px; } }
