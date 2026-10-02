@@ -35,19 +35,19 @@ P0 不新建服务、数据库或 FastAPI。这里的「后端」指结果契约
 | T006 | 已完成 | `extension/src/curve/validate.js`。`time` 用秒，默认容差 ±0.2 秒 |
 | T008 | 已完成 | `extension/src/curve/evaluate.js`。只注册夹具 `fixture.parabola`，不把某条代数式写成正式公式 |
 | T009 | 已完成 | `extension/assets/config.json`：`enableLocalMock`、`fallbackAfterMs: 1500`、`externalAttempt: "off"`。不得写密钥或上传地址 |
-| T011 | 已完成 | `tests/session.test.js` 覆盖 `externalAttempt` 非 `off`、单会话、播放/离开目标时间结束会话，以及原有校验规则 |
+| T011 | 已完成 | `tests/session.test.js` 覆盖 `externalAttempt` 非 `off`、单会话、播放/离开目标时间结束会话，以及原有校验规则；14 项通过 |
 | T012 | 已完成 | `extension/src/session/session.js` 收紧会话入口和生命周期；非 `off` 不得进入交互，播放/离开目标时间使旧请求失效 |
 | T013 | 已完成 | `extension/assets/presets/` 里的夹具 JSON |
 | T018 | 已完成 | 对照 `contracts/extension-surface.md` 核对 manifest：无主机权限、无内容脚本、无远程脚本 |
 
-T011、T012、T015 已完成。前端接下来只做 T017。
+当前先写 T011，再写 T012。
 
 ## 交接顺序
 
-1. 后端已完成 T011、T012。非 `off` 在进入等待前就被拒绝，进行中的会话不会被第二次唤醒替换。
-2. 前端已完成 T015。页面调用会话状态，播放或离开目标时间时走 `onPlaybackChange`。
+1. 后端先补 T011、T012。
+2. 前端再收 T015。页面只调用会话给出的状态，不自己另判一套「能不能画」。
 3. 前端做 T017，并把手工记录写回任务说明。
-4. T017 和正式视频到位前，双方都不开始故事 2。
+4. 故事 1 这四项没收完之前，双方都不开始故事 2。
 
 ## 还没编号的后续
 
@@ -61,3 +61,4 @@ T011、T012、T015 已完成。前端接下来只做 T017。
 | 真实识别、单帧上传、感知代理 | 暂不派 | 宪法允许的服务端只有无状态感知代理，而且现在不准在本仓库开工 |
 | Pyodide、代码执行 | 暂不派 | 独立 P1，不进这次任务 |
 | FastAPI 或其他业务后端 | 不派 | P0 明确不做 |
+

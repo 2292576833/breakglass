@@ -58,7 +58,7 @@
 
 ### Tests for User Story 1
 
-- [x] T011 [P] [US1] 补齐 `tests/session.test.js`：时间落在目标 ±0.2 秒才可唤醒；拖动钳制；重置后仍在交互；退出后会话消失；旧 `requestId` 不能写入；`externalAttempt` 不是 `off` 时不得进入交互；同一时刻只有一个会话；播放或离开目标时间时结束会话
+- [x] T011 [P] [US1] 补齐 `tests/session.test.js`：时间落在目标 ±0.2 秒才可唤醒；拖动钳制；重置后仍在交互；退出后会话消失；旧 `requestId` 不能写入；`externalAttempt` 不是 `off` 时不得进入交互；同一时刻只有一个会话；播放或离开目标时间时结束会话。共 14 项纯函数测试通过
 
 ### Implementation for User Story 1
 
