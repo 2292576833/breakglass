@@ -21,7 +21,7 @@ P0 不新建服务、数据库或 FastAPI。这里的「后端」指结果契约
 | T014 | 已完成 | `extension/demo/index.html`、`extension/demo/demo.css` |
 | T015 | 已完成 | `extension/src/page/main.js`：来源始终是「预先准备的示例」；已有覆盖层时 Alt+B 不再挂第二层；点击覆盖层外部退出并保持暂停；源尺寸使用当前视频的 `videoWidth` 与 `videoHeight` |
 | T016 | 已完成 | 视频缺失时的说明，`extension/assets/video/README.md` |
-| T017 | 未完成 | 按 `quickstart.md` 第 1 节加载未打包扩展，记录手工结果。不做第 2、3 节 |
+| T017 | 阻塞 | manifest、入口和脚本预检已通过；按 `quickstart.md` 第 1 节的 Chrome 手工结果因当前环境无可控窗口、正式视频未提供而待执行。不做第 2、3 节 |
 
 当前只做 T017 的浏览器手工记录。T011、T012、T015 已收完；故事 1 的最终验收仍依赖正式视频和目标帧素材。
 

@@ -48,7 +48,7 @@ P0 不加载 Pyodide、WASM、远程脚本或任意代码执行容器。若未�
 | T014 | 建立扩展内演示页、视频控制、破壁/重置/退出和来源区域 | `extension/demo/index.html`、`extension/demo/demo.css` | 已完成 | 页面结构和控件存在 |
 | T015 | 收口页面会话：Alt+B、单 overlay、拖动、重置、退出、外部点按、当前视频尺寸映射 | `extension/src/page/main.js` | 已完成 | `node --check`；14 项测试通过；手工验收待记录 |
 | T016 | 视频缺失或打不开时只提示，不挂夹具曲线冒充正式对齐 | `extension/assets/video/README.md`、`extension/src/page/main.js` | 已完成 | 错误状态和素材说明存在 |
-| T017 | 按 quickstart 第 1 节在 Chrome 加载未打包扩展并记录主路径 | `specs/001-insitu-parabola/quickstart.md`、本文 | 待手工验收 | 需要 Chrome 操作记录；正式视频到位后再做原位结论 |
+| T017 | 按 quickstart 第 1 节在 Chrome 加载未打包扩展并记录主路径 | `specs/001-insitu-parabola/quickstart.md`、本文 | 阻塞：待 Chrome 手工验收 | 预检已完成；需要可控 Chrome 窗口，正式视频到位后再做原位结论 |
 
 ### 协作但不归前端任务表的结果规则
 
@@ -92,8 +92,20 @@ P0 不加载 Pyodide、WASM、远程脚本或任意代码执行容器。若未�
 - T017 的 Chrome 手工记录、正式演示视频、目标时间、曲线定义和四画幅原位误差证据仍待补齐。
 - 故事 2、故事 3、真实识别、单帧上传、Pyodide 和后端服务不属于当前已完成范围。
 
+### T017 预检记录
+
+已完成的确定性预检：
+
+- `extension/manifest.json` 可解析，`manifest_version` 为 3。
+- `permissions`、`host_permissions` 为空，未声明 `content_scripts`。
+- 扩展页 CSP 为 `script-src 'self'; object-src 'self'`，演示页入口、service worker 和本地脚本均存在。
+- `node --test` 14 项通过；`node --check extension/src/page/main.js` 和 `node --check extension/src/session/session.js` 通过。
+
+尚不能记录为手工通过的部分：当前执行环境没有可控 Chrome 窗口，仓库也没有正式视频、目标时间和匹配曲线素材。T017 的下一步是加载 `extension/` 未打包扩展，打开扩展内演示页，确认缺失素材提示和主路径控件，再用正式素材完成 quickstart 第 1 节；在此之前不宣称故事 1 原位验收通过。
+
 ## 变更记录
 
 | 日期 | 任务/范围 | 变更 | 验证 | 提交/PR |
 | --- | --- | --- | --- | --- |
 | 2026-10-02 | 文档初始化 | 建立前端职责、技术路线、任务表、执行流程和逐项更新规则 | 文档审查；`node --test` 14 项通过 | PR #6 |
+| 2026-10-02 | T017 | 完成 manifest/入口/脚本确定性预检，记录 Chrome 窗口和正式素材阻塞 | 自动检查通过；手工验收未执行 | PR #7 |

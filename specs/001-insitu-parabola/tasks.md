@@ -76,7 +76,7 @@
 
 **Purpose**: 只验收已拆分的 MVP
 
-- [ ] T017 按 `specs/001-insitu-parabola/quickstart.md` 第 1 节加载未打包扩展并记录结果。不执行该文件第 2 节和第 3 节。自动化夹具已通过，这一步的手工点击还没有记录
+- [ ] T017 按 `specs/001-insitu-parabola/quickstart.md` 第 1 节加载未打包扩展并记录结果。不执行该文件第 2 节和第 3 节。manifest、入口和脚本预检已通过；Chrome 手工点击因当前环境无可控窗口、正式视频未提供而阻塞
 - [x] T018 [P] 对照 `specs/001-insitu-parabola/contracts/extension-surface.md` 检查 `extension/manifest.json`，确认没有主机权限、内容脚本和远程脚本。2026-10-02 核对通过：权限与主机权限为空，未声明 `content_scripts`，扩展页 CSP 为 `script-src 'self'; object-src 'self'`
 
 ---
